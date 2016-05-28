@@ -1,111 +1,199 @@
 package com.example.sxj52.meizhigilr.view.activity.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.example.sxj52.meizhigilr.R;
+import com.example.sxj52.meizhigilr.adpter.GanHuoAdpter;
+import com.example.sxj52.meizhigilr.adpter.MeiZhiAdpter;
+import com.example.sxj52.meizhigilr.model.GanHuo;
+import com.example.sxj52.meizhigilr.retrofit.GankRetrofit;
+import com.example.sxj52.meizhigilr.retrofit.GankService;
+import com.example.sxj52.meizhigilr.view.activity.GanHuoActivity;
+import com.example.sxj52.meizhigilr.view.activity.MeiZhiActivity;
+import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MainFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-    private OnFragmentInteractionListener mListener;
+public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        RecyclerArrayAdapter.OnLoadMoreListener{
+    private EasyRecyclerView recyclerView;
+    private LinearLayout noWIFILayout;
+    private List<GanHuo.Result> ganHuoList;
+    private GanHuoAdpter ganHuoAdapter;
+    private MeiZhiAdpter meiZhiAdapter;
 
-    public MainFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    private boolean isNetWork = true;
+    private String title;
+    private int page = 1;
+    private Handler handler = new Handler();
+    //iOSList;androidList;welfareList;videoList;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        Bundle bundle = getArguments();
+        title = bundle.getString("title");
+    }
+    public static MainFragment getInstance(String title){
+        MainFragment mainFragment = new MainFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title",title);
+        mainFragment.setArguments(bundle);
+        return mainFragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_layout, container, false);
+        initView(view);
+        return view;
+    }
+
+    private void initView(View view) {
+        ganHuoList = new ArrayList<>();
+        noWIFILayout = (LinearLayout) view.findViewById(R.id.no_network);
+        recyclerView = (EasyRecyclerView) view.findViewById(R.id.recycler_view);
+
+        if (title.equals("福利")){
+            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(staggeredGridLayoutManager);
+            meiZhiAdapter = new MeiZhiAdpter(getContext());
+
+            dealWithAdapter(meiZhiAdapter);
+        }else{
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            ganHuoAdapter = new GanHuoAdpter(getContext());
+            //recyclerView.setAdapterWithProgress(ganHuoAdapter);
+            dealWithAdapter(ganHuoAdapter);
         }
+
+        recyclerView.setRefreshListener(this);
+        onRefresh();
+    }
+
+    private void dealWithAdapter(final RecyclerArrayAdapter<GanHuo.Result> adapter) {
+        recyclerView.setAdapterWithProgress(adapter);
+
+        adapter.setMore(R.layout.load_more_layout,this);
+        adapter.setNoMore(R.layout.no_more_layout);
+        adapter.setError(R.layout.error_layout);
+        adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //Snackbar.make(recyclerView,adapter.getItem(position).getDesc(), Snackbar.LENGTH_SHORT).show();
+                if (title.equals("福利")){
+                    Intent intent = new Intent(getContext(), MeiZhiActivity.class);
+                    jumpActivity(intent,adapter,position);
+                }else {
+                    Intent intent = new Intent(getContext(), GanHuoActivity.class);
+                    jumpActivity(intent,adapter,position);
+                }
+            }
+        });
+    }
+    private void jumpActivity(Intent intent,RecyclerArrayAdapter<GanHuo.Result> adapter,int position) {
+        intent.putExtra("desc",adapter.getItem(position).getDesc());
+        intent.putExtra("url",adapter.getItem(position).getUrl());
+        startActivity(intent);
+    }
+    private void getData(String type,int count,int page) {
+        GankRetrofit.getRetrofit()
+                .create(GankService.class)
+                .getGanHuo(type,count,page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GanHuo>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.e("666","onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        noWIFILayout.setVisibility(View.VISIBLE);
+                        Snackbar.make(recyclerView,"NO WIFI，不能愉快的看妹纸啦..",Snackbar.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNext(GanHuo ganHuo) {
+                        ganHuoList = ganHuo.getResults();
+                        if (title.equals("福利")){
+                            meiZhiAdapter.addAll(ganHuoList);
+                        }else {
+                            ganHuoAdapter.addAll(ganHuoList);
+                        }
+                    }
+                });
+    }
+
+
+    @Override
+    public void onLoadMore() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (title.equals("福利")){
+                    getData("福利",20,page);
+                }else if (title.equals("Android")){
+                    getData("Android",20,page);
+                }else if (title.equals("iOS")){
+                    getData("iOS",20,page);
+                }
+                else if (title.equals("休息视频")){
+                    getData("休息视频",20,page);
+                }
+                page++;
+            }
+        }, 1000);
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
-        return textView;
-    }
+    public void onRefresh() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (title.equals("福利")){
+                    meiZhiAdapter.clear();
+                    getData("福利",20,1);
+                }else{
+                    ganHuoAdapter.clear();
+                    if (title.equals("Android")){
+                        getData("Android",20,1);
+                    }else if (title.equals("iOS")){
+                        getData("iOS",20,1);
+                    }
+                    else if (title.equals("休息视频")){
+                        getData("休息视频",20,1);
+                    }
+                }
+                page = 2;
+            }
+        }, 1000);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
