@@ -97,6 +97,7 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         adapter.setMore(R.layout.load_more_layout,this);
         adapter.setNoMore(R.layout.no_more_layout);
         adapter.setError(R.layout.error_layout);
+        //点击事件
         adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
