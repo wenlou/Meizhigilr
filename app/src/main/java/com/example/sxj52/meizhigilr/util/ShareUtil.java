@@ -9,7 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.webkit.WebView;
 
 /**
- * Created by gaohailong on 2016/5/19.
+ * Created by sxj52 on 2016/5/27.
  */
 public class ShareUtil {
     public static void shareText(Context context,String text){

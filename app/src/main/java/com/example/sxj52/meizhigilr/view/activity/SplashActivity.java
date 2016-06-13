@@ -22,7 +22,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by gaohailong on 2016/5/23.
+ * Created by sxj52 on 2016/5/27..
  */
 public class SplashActivity extends AppCompatActivity {
     private ImageView image;

@@ -22,7 +22,7 @@ import com.example.sxj52.meizhigilr.util.ShareUtil;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
- * Created by gaohailong on 2016/5/18.
+ * Created by sxj52 on 2016/5/27.
  */
 public class MeiZhiActivity extends AppCompatActivity {
 

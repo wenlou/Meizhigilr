@@ -19,7 +19,7 @@ import com.example.sxj52.meizhigilr.R;
 import com.example.sxj52.meizhigilr.util.ShareUtil;
 
 /**
- * Created by gaohailong on 2016/5/18.
+ * Created by sxj52 on 2016/5/27..
  */
 public class GanHuoActivity extends AppCompatActivity {
 

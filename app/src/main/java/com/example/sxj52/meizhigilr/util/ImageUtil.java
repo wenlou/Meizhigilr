@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Created by gaohailong on 2016/5/20.
+ * Created by sxj52 on 2016/5/27..
  */
 public class ImageUtil {
     public static Uri saveImage(Context context, String url, Bitmap bitmap,ImageView imageView,String tag){

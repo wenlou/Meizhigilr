@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by gaohailong on 2016/5/18.
+ * Created by sxj52 on 2016/5/27..
  */
 public class TimeUtil {
     public static String getFormatTime(String time){
