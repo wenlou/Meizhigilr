@@ -22,7 +22,7 @@
             android:layout_height="100dp" />
 
         <TextView
-            android:text="NO WIFI，不能愉快的看妹纸啦.. ( ＞ω＜)"
+            android:text="没有网络，不能愉快的看妹纸啦.. ( ＞ω＜)"
             android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

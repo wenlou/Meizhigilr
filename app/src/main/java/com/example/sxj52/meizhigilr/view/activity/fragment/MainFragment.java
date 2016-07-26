@@ -118,7 +118,7 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         startActivity(intent);
     }
     private void getData(String type,int count,int page) {
-        GankRetrofit.getRetrofit()
+        GankRetrofit.getRetrofit(getContext())
                 .create(GankService.class)
                 .getGanHuo(type,count,page)
                 .subscribeOn(Schedulers.io())
@@ -132,7 +132,7 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     @Override
                     public void onError(Throwable e) {
                         noWIFILayout.setVisibility(View.VISIBLE);
-                        Snackbar.make(recyclerView,"NO WIFI，不能愉快的看妹纸啦..",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(recyclerView,"没有网络，不能愉快的看妹纸啦..",Snackbar.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -150,7 +150,7 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onLoadMore() {
-        handler.postDelayed(new Runnable() {
+         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (title.equals("福利")){

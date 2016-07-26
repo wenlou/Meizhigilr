@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.sxj52.meizhigilr.BaseApplication;
 import com.example.sxj52.meizhigilr.R;
 import com.example.sxj52.meizhigilr.model.GanHuo;
 import com.example.sxj52.meizhigilr.retrofit.GankRetrofit;
@@ -41,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
     private void init() {
         image = (ImageView) findViewById(R.id.welcome_image);
 
-        GankRetrofit.getRetrofit()
+        GankRetrofit.getRetrofit(getApplicationContext())
                 .create(GankService.class)
                 .getGanHuo("福利",1,1)
                 .subscribeOn(Schedulers.io())
@@ -64,11 +65,13 @@ public class SplashActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(GanHuo ganHuo) {
+                        BaseApplication.currentGirl=ganHuo.getResults().get(0).getUrl();
                         Log.e("666","onNext");
                         Glide.with(SplashActivity.this)
-                                .load(ganHuo.getResults().get(0).getUrl())
+                                .load(BaseApplication.currentGirl)
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(image);
+
                     }
                 });
 

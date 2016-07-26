@@ -10,7 +10,7 @@
         android:layout_height="match_parent"/>
 
     <TextView
-        android:text="GankGirl  V1.0\n gaolonglong"
+        android:text="Meizhigilr \n shenxiaojian"
         android:textColor="#FFFFFF"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="20dp"

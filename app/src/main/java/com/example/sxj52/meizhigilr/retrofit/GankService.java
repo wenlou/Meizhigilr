@@ -21,10 +21,10 @@ public interface GankService {
     http://gank.io/api/data/iOS/20/2
     http://gank.io/api/data/all/20/2
     */
-    @GET("api/data/{type}/{count}/{page}")
+   @GET("api/data/{type}/{count}/{page}")
     Observable<GanHuo> getGanHuo(
-        @Path("type") String type,
-        @Path("count") int count,
-        @Path("page") int page
-    );
+           @Path("type") String type,
+           @Path("count") int count,
+           @Path("page")  int page
+   );
 }

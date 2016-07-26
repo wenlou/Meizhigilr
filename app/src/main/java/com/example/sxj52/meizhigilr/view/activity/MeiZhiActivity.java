@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -99,9 +98,7 @@ public class MeiZhiActivity extends AppCompatActivity {
             case R.id.action_save:
                 ImageUtil.saveImage(this,url,bitmap,image,"save");
                 break;
-            case R.id.action_click_me:
-                Snackbar.make(image,"美女来了.. ヾ (o ° ω ° O ) ノ", Snackbar.LENGTH_SHORT).show();
-                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
