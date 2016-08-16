@@ -19,4 +19,5 @@ public class GanHuoAdpter extends RecyclerArrayAdapter<GanHuo.Result> {
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
         return new GanHuoViewHolder(parent);
     }
+
 }

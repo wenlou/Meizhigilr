@@ -26,7 +26,10 @@
         <activity android:name=".view.activity.MeiZhiActivity"/>
         <activity
             android:name=".view.activity.AboutActivity"
-            android:theme="@style/AppTheme.Splash"/>
+            android:theme="@style/AppTheme1"/>
+        <activity android:name=".view.activity.BookDetailActivity"
+                  android:theme="@style/AppTheme1" />
+        <activity android:name=".view.activity.EbookWebActivty"/>
     </application>
 
 </manifest>

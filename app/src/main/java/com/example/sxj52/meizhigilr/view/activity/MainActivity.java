@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.sxj52.meizhigilr.R;
+import com.example.sxj52.meizhigilr.view.activity.fragment.BookFragment;
 import com.example.sxj52.meizhigilr.view.activity.fragment.MainFragment;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private List<Fragment> fragments;
-    private String[] titles = {"福利","Android","iOS","休息视频"};
+    private String[] titles = {"阅读","福利","Android","iOS","休息视频"};
     private long exitTime = 0;
 
     @Override
@@ -34,15 +35,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-
         Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fragments=new ArrayList<>() ;
-        for(String title:titles){
-            fragments.add(MainFragment.getInstance(title));
+        fragments.add(BookFragment.getInstance("阅读"));
+        for(int i=1;i<titles.length;i++){
+            fragments.add(MainFragment.getInstance(titles[i]));
         }
         viewPager= (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public CharSequence getPageTitle(int position) {

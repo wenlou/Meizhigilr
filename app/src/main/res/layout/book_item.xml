@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:clickable="true"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        >
+    <ImageView
+        android:id="@+id/ebook"
+        android:src="@mipmap/ic_ebook_blue"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:layout_margin="10dp"
+        />
+
+    <LinearLayout
+        style="@style/CardView.Content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+       >
+
+        <ImageView
+            android:id="@+id/ivBook"
+            android:transitionName="@string/transition_book_img"
+            android:layout_width="109dp"
+            android:layout_height="135dp"
+            android:src="@drawable/book1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/tvDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="作者: [美] 凯文·凯利 \n副标题: 全人类的最终命运和结局 \n出版年: 2010-12 \n页数: 707 \n定价: 88.00元"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

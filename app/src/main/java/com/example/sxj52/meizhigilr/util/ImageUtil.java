@@ -19,7 +19,8 @@ import java.io.IOException;
 public class ImageUtil {
     public static Uri saveImage(Context context, String url, Bitmap bitmap,ImageView imageView,String tag){
         //妹纸保存路径
-        String imgDir = Environment.getExternalStorageDirectory().getPath() + "/GankGirl";
+        String imgDir = Environment.getExternalStorageDirectory().getPath() + "/Meizhigirl";
+
         //图片名称处理
         String[] fileNameArr = url.substring(url.lastIndexOf("/") + 1).split("\\.");
         String fileName = fileNameArr[0] + ".png";

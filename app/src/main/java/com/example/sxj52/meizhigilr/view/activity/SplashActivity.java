@@ -42,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
     private void init() {
         image = (ImageView) findViewById(R.id.welcome_image);
 
-        GankRetrofit.getRetrofit(getApplicationContext())
+        GankRetrofit.getRetrofit()
                 .create(GankService.class)
                 .getGanHuo("福利",1,1)
                 .subscribeOn(Schedulers.io())
@@ -68,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                         BaseApplication.currentGirl=ganHuo.getResults().get(0).getUrl();
                         Log.e("666","onNext");
                         Glide.with(SplashActivity.this)
-                                .load(BaseApplication.currentGirl)
+                                .load(ganHuo.getResults().get(0).getUrl())
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(image);
 

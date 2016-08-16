@@ -3,8 +3,7 @@ package com.example.sxj52.meizhigilr;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.sxj52.meizhigilr.model.GanHuo;
-import com.example.sxj52.meizhigilr.retrofit.GankRetrofit;
+import com.example.sxj52.meizhigilr.retrofit.BookRetrofit;
 
 /**
  * Created by xcc on 2015/12/16.
@@ -20,7 +19,8 @@ public class BaseApplication extends Application {
         super.onCreate();
         mAppContext = getApplicationContext();
         // 初始化 retrofit
-        GankRetrofit.init(getApplicationContext());
+        //GankRetrofit.init(getApplicationContext());
+        BookRetrofit.init(getApplicationContext());
 
 
 

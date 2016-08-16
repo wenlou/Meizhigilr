@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/no_network"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ProgressBar
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@drawable/xiaomai"
+            app:civ_border_color="#666666"
+            app:civ_border_width="1dp"
+            android:layout_marginTop="130dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:text="出错了.. ( ＞ω＜)"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/progress"
+        android:visibility="visible"
+        app:indicator="Pacman"
+        android:layout_gravity="center"
+        app:indicator_color="@color/colorAccent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+    </com.wang.avi.AVLoadingIndicatorView>
 
 </LinearLayout>
