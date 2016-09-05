@@ -2,6 +2,7 @@ package com.example.sxj52.meizhigilr.view.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,6 @@ public class MeiZhiActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.meizhi_layout);
-
         init();
 
     }
@@ -61,6 +61,7 @@ public class MeiZhiActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_white_24dp);
         getSupportActionBar().setTitle(desc);
+
         //ImageView
         image = (ImageView) findViewById(R.id.image_meizhi);
         attacher = new PhotoViewAttacher(image);
@@ -90,7 +91,9 @@ public class MeiZhiActivity extends AppCompatActivity {
 
         switch (id){
             case android.R.id.home:
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                }
                 break;
             case R.id.action_share:
                 ShareUtil.shareImage(this, ImageUtil.saveImage(this,url,bitmap,image,"share"));

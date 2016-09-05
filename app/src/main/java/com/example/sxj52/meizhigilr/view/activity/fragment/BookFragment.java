@@ -1,19 +1,22 @@
 package com.example.sxj52.meizhigilr.view.activity.fragment;
 
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 
@@ -24,8 +27,8 @@ import com.example.sxj52.meizhigilr.retrofit.BookAPi;
 import com.example.sxj52.meizhigilr.retrofit.BookRetrofit;
 import com.example.sxj52.meizhigilr.retrofit.BookServer;
 import com.example.sxj52.meizhigilr.retrofit.MyAdapter;
-import com.example.sxj52.meizhigilr.view.activity.BookDetailActivity;
 import com.example.sxj52.meizhigilr.util.RecyclerItemClickListener;
+import com.example.sxj52.meizhigilr.view.activity.BookDetailActivity;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -76,9 +79,18 @@ public class BookFragment extends Fragment
 
            private void setUpFAB(View view) {
                mFabButton = (FloatingActionButton) view.findViewById(R.id.fab_normal);
+               mFabButton.setTranslationY(2 * getResources().getDimensionPixelOffset(R.dimen.btn_fab_size));
                mFabButton.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View view) {
+                       float endRadius = (float) Math.hypot(mFabButton.getWidth(),mFabButton.getHeight());//勾股定理得到斜边长度
+                       Animator mAnimator = null;
+                       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                           mAnimator = ViewAnimationUtils.createCircularReveal(mFabButton,mFabButton.getWidth(), 0, 0, endRadius);
+                       }
+                       mAnimator.setDuration(2000);
+                       mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                       mAnimator.start();
                        new MaterialDialog.Builder(getActivity())
                                .title(R.string.search)
                                //.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
@@ -94,8 +106,6 @@ public class BookFragment extends Fragment
                    }
                });
            }
-
-
            private void startFABAnimation() {
                mFabButton.animate()
                        .translationY(0)
@@ -104,12 +114,13 @@ public class BookFragment extends Fragment
                        .setDuration(ANIM_DURATION_FAB)
                        .start();
            }
+
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
         noWIFILayout= (LinearLayout) view.findViewById(R.id.no_network);
         mProgressBar = (AVLoadingIndicatorView) view.findViewById(R.id.progress);
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), onItemClickListener));
@@ -124,7 +135,10 @@ public class BookFragment extends Fragment
                    Book book = mAdapter.getBook(position);
                    Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                    intent.putExtra("book", book);
-                  startActivity(intent);
+                   ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view.findViewById(R.id.ivBook), "tushu");
+
+                   ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                   //startActivity(intent);
 
                }
            };
@@ -152,8 +166,8 @@ public class BookFragment extends Fragment
                                 mProgressBar.setVisibility(View.GONE);
 
                                 mAdapter.updateItems(mBookList,true);
-                                setUpFAB(getView());
-                                Snackbar.make(getView(),"加载完成",Snackbar.LENGTH_SHORT).show();
+                                startFABAnimation();
+                                //Snackbar.make(getView(),"加载完成",Snackbar.LENGTH_SHORT).show();
 
                             }
 
@@ -164,8 +178,8 @@ public class BookFragment extends Fragment
                             }
 
                             @Override
-                            public void onNext(Book ganHuo) {
-                                mBookList.add(ganHuo);
+                            public void onNext(Book book) {
+                                mBookList.add(book);
                             }
                         });
     }

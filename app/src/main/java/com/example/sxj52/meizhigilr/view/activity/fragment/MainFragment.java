@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +25,7 @@ import com.example.sxj52.meizhigilr.adpter.MeiZhiAdpter;
 import com.example.sxj52.meizhigilr.model.GanHuo;
 import com.example.sxj52.meizhigilr.retrofit.GankRetrofit;
 import com.example.sxj52.meizhigilr.retrofit.GankService;
+import com.example.sxj52.meizhigilr.util.RecyclerItemClickListener;
 import com.example.sxj52.meizhigilr.view.activity.GanHuoActivity;
 import com.example.sxj52.meizhigilr.view.activity.MeiZhiActivity;
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -73,10 +77,19 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ganHuoList = new ArrayList<>();
         noWIFILayout = (LinearLayout) view.findViewById(R.id.no_network);
         recyclerView = (EasyRecyclerView) view.findViewById(R.id.recycler_view);
-
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),onItemClickListener));
         if (title.equals("福利")){
-            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+            final StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+            staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
             recyclerView.setLayoutManager(staggeredGridLayoutManager);
+            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    staggeredGridLayoutManager.invalidateSpanAssignments(); //防止第一行到顶部有空白区域
+                }
+            });
+
             meiZhiAdapter = new MeiZhiAdpter(getContext());
 
             dealWithAdapter(meiZhiAdapter);
@@ -90,32 +103,33 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         recyclerView.setRefreshListener(this);
         onRefresh();
     }
+    private RecyclerItemClickListener.OnItemClickListener onItemClickListener = new RecyclerItemClickListener.OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            Intent intent;
+            if (title.equals("福利")){
+                intent = new Intent(getContext(), MeiZhiActivity.class);
+                intent.putExtra("desc",meiZhiAdapter.getItem(position).getDesc());
+                intent.putExtra("url",meiZhiAdapter.getItem(position).getUrl());
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view.findViewById(R.id.image), "sunzxyong");
+                ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+            }else {
+                intent = new Intent(getContext(), GanHuoActivity.class);
+                intent.putExtra("desc",ganHuoAdapter.getItem(position).getDesc());
+                intent.putExtra("url",ganHuoAdapter.getItem(position).getUrl());
+                startActivity(intent);
+            }
 
-    private void dealWithAdapter(final RecyclerArrayAdapter<GanHuo.Result> adapter) {
+
+        }
+    };
+
+    private void dealWithAdapter( final RecyclerArrayAdapter<GanHuo.Result> adapter) {
         recyclerView.setAdapterWithProgress(adapter);
 
         adapter.setMore(R.layout.load_more_layout,this);
         adapter.setNoMore(R.layout.no_more_layout);
         adapter.setError(R.layout.error_layout);
-        //点击事件
-        adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //Snackbar.make(recyclerView,adapter.getItem(position).getDesc(), Snackbar.LENGTH_SHORT).show();
-                if (title.equals("福利")){
-                    Intent intent = new Intent(getContext(), MeiZhiActivity.class);
-                    jumpActivity(intent,adapter,position);
-                }else {
-                    Intent intent = new Intent(getContext(), GanHuoActivity.class);
-                    jumpActivity(intent,adapter,position);
-                }
-            }
-        });
-    }
-    private void jumpActivity(Intent intent,RecyclerArrayAdapter<GanHuo.Result> adapter,int position) {
-        intent.putExtra("desc",adapter.getItem(position).getDesc());
-        intent.putExtra("url",adapter.getItem(position).getUrl());
-        startActivity(intent);
     }
     private void getData(String type,int count,int page) {
         GankRetrofit.getRetrofit()

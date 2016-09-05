@@ -29,5 +29,6 @@ public class MeiZhiViewHolder extends BaseViewHolder<GanHuo.Result> {
         //DiskCacheStrategy.SOURCE:缓存原始数据
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(image);
+        //Picasso.with(getContext()).load(data.getUrl()).into(image);
     }
 }

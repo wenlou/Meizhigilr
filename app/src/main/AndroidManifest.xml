@@ -23,7 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.GanHuoActivity"/>
-        <activity android:name=".view.activity.MeiZhiActivity"/>
+        <activity android:name=".view.activity.MeiZhiActivity"
+                  android:theme="@style/AppTheme2"
+            />
         <activity
             android:name=".view.activity.AboutActivity"
             android:theme="@style/AppTheme1"/>

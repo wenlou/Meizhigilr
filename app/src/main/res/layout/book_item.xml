@@ -36,7 +36,7 @@
 
         <ImageView
             android:id="@+id/ivBook"
-            android:transitionName="@string/transition_book_img"
+            android:transitionName="tushu"
             android:layout_width="109dp"
             android:layout_height="135dp"
             android:src="@drawable/book1" />

@@ -21,7 +21,6 @@
         android:layout_marginRight="10dp"
         android:src="@drawable/ic_find_in_page_white"
         app:borderWidth="0dp"
-        app:layout_behavior="com.example.sxj52.meizhigilr.util.FloatingActionButtonScrollBehavior"
         />
 
     <include layout="@layout/progress_layout" />
