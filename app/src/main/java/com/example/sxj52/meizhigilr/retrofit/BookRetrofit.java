@@ -46,7 +46,6 @@ public class BookRetrofit { private static BookServer apiService = null;
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-
                 .retryOnConnectionFailure(true)
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .build();
@@ -62,7 +61,7 @@ public class BookRetrofit { private static BookServer apiService = null;
         apiService = retrofit.create(BookServer.class);
     }
 
-    public static BookServer getApiService(Context context) {
+    public static BookServer  getApiService(Context context) {
         if (apiService != null) return apiService;
         init(context);
         return getApiService(context);
