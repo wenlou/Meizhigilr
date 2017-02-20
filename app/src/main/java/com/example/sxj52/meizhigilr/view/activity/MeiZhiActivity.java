@@ -19,6 +19,7 @@ import com.example.sxj52.meizhigilr.R;
 import com.example.sxj52.meizhigilr.util.ImageUtil;
 import com.example.sxj52.meizhigilr.util.ShareUtil;
 
+import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -63,7 +64,7 @@ public class MeiZhiActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(desc);
 
         //ImageView
-        image = (ImageView) findViewById(R.id.image_meizhi);
+        image = (PhotoView) findViewById(R.id.image_meizhi);
         attacher = new PhotoViewAttacher(image);
         Glide.with(this)
                 .load(url)

@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Meizhigilr.iml" filepath="$PROJECT_DIR$/Meizhigilr.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/draghelp/draghelp.iml" filepath="$PROJECT_DIR$/draghelp/draghelp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/firstdrp/firstdrp.iml" filepath="$PROJECT_DIR$/firstdrp/firstdrp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/firstkotlin/firstkotlin.iml" filepath="$PROJECT_DIR$/firstkotlin/firstkotlin.iml" />
     </modules>
   </component>
 </project>

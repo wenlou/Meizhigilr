@@ -14,7 +14,7 @@
             app:theme="@style/ToolbarTheme"
             app:titleTextColor="@color/white"/>
 
-    <ImageView
+    <uk.co.senab.photoview.PhotoView
         android:id="@+id/image_meizhi"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
